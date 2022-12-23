@@ -1,26 +1,42 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+
+<Suspense>
+  <template #default>
+    <Home/>
+  </template>
+
+  <template #fallback>
+    <Welcome/>
+  </template>
+</Suspense>
+
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-
+//Utilizando defineAsyncComponent para mostrar un tiempo de forma asincrona
+// y utilizando slots 
+//import Home from "@/components/Home.vue"
+import Welcome from "@/components/Welcome.vue"
+import { defineAsyncComponent } from "vue";
 export default {
   name: "App",
-  components: {
-    HelloWorld,
-  },
+  components:{
+    Welcome,
+    Home:defineAsyncComponent(() => 
+      new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(import("./components/Home.vue"))
+        },2500);
+      })
+     ),
+  }
 };
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+*{
+  margin: 0;
+  padding: 0;
+  font-family:'Courier New', Courier, monospace;
 }
 </style>
